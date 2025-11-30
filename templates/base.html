@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title or "Finanzas" }}</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <div class="sb-logo">💰</div>
+
+    {% if user %}
+    <div class="sb-nav">
+        <a class="sb-btn" href="/dashboard">🏠</a>
+        <a class="sb-btn" href="/cuentas">💼</a>
+        <a class="sb-btn" href="/transacciones">💸</a>
+        <a class="sb-btn" href="/historial">📅</a>
+    </div>
+    {% endif %}
+
+    {% if user %}
+    <a class="sb-btn" href="/logout">🚪</a>
+    {% endif %}
+</div>
+
+<!-- MAIN -->
+<div class="main">
+    <div class="main-header">
+        <div>
+            <h1 class="title">{{ title }}</h1>
+            {% if subtitle %}
+            <p class="sub">{{ subtitle }}</p>
+            {% endif %}
+        </div>
+
+        {% if user %}
+        <div class="header-actions">
+            <div class="avatar">{{ user.email[0].upper() }}</div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+
+</body>
+</html>

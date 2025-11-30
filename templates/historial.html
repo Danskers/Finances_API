@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+    <h2>Historial — {{ mes }}</h2>
+
+    <form method="GET" class="form-inline">
+        <input type="month" name="mes" value="{{ mes }}">
+        <button class="btn btn-primary" type="submit">Ver</button>
+    </form>
+
+    <div class="kpi-grid">
+        <div class="card">
+            <div class="kpi-title">Ingresos</div>
+            <div class="kpi-value">${{ '%.2f'|format(total_ingresos) }}</div>
+        </div>
+        <div class="card">
+            <div class="kpi-title">Gastos</div>
+            <div class="kpi-value">${{ '%.2f'|format(total_gastos) }}</div>
+        </div>
+        <div class="card">
+            <div class="kpi-title">Límite</div>
+            <div class="kpi-value">${{ '%.2f'|format(monto_limite) }}</div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Transacciones</h3>
+
+    <ul class="tx-list">
+        {% for t in transacciones %}
+        <li class="tx-row">
+            <div class="tx-left">
+                <div class="tx-icon">
+                    {% if t.tipo == "ingreso" %}💚{% elif t.tipo == "gasto" %}❤️{% else %}⚠️{% endif %}
+                </div>
+                <div>
+                    <div class="tx-title">${{ '%.2f'|format(t.monto) }}</div>
+                    <div class="tx-meta">{{ t.fecha.strftime('%Y-%m-%d') }} — {{ t.categoria }} / {{ t.subcategoria }}</div>
+                </div>
+            </div>
+            <div class="tx-right">{{ t.tipo }}</div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}

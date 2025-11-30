@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+    <h2>Cuentas</h2>
+
+    <ul class="tx-list">
+       {% for c in cuentas %}
+    <div class="cuenta-item" style="display:flex; justify-content:space-between; align-items:center; padding:10px 0;">
+
+        <div style="display:flex; align-items:center; gap:10px;">
+            <span class="icon">💼</span>
+            <span>{{ c.nombre }}</span>
+        </div>
+
+        <div class="tx-right" style="display:flex; gap:10px;">
+            <!-- Botón Editar -->
+            <form action="/cuentas/editar/{{ c.id }}" method="post" style="display:flex; gap:6px;">
+                <input type="text" name="nombre" placeholder="Nuevo nombre" class="input-dark-small">
+                <button class="btn btn-primary">Renombrar</button>
+            </form>
+
+        <form method="post" action="/cuentas/eliminar/{{ c.id }}" onsubmit="return confirm('¿Eliminar esta cuenta?')">
+           <button class="btn-ghost" style="margin-left:10px; color:#ef4444;">
+                        Eliminar
+           </button>
+        </form>
+
+    </div>
+        {% endfor %}
+
+
+    </ul>
+</div>
+
+<div class="card">
+    <h3>Agregar nueva cuenta</h3>
+    <form method="POST">
+        <input type="text" name="nombre" placeholder="Nombre de la cuenta" required>
+        <button class="btn btn-primary" type="submit">Agregar</button>
+    </form>
+</div>
+
+{% endblock %}

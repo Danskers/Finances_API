@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="auth-card">
+    <h2>Crear cuenta</h2>
+
+    {% if error %}
+    <p class="error">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST">
+        <label>Email:</label>
+        <input type="email" name="email" required>
+
+        <label>Contraseña:</label>
+        <input type="password" name="password" required>
+
+        <button class="btn btn-primary" type="submit">Registrar</button>
+
+        <p>¿Ya tienes cuenta? <a class="btn-link" href="/login">Iniciar sesión</a></p>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+    <h2>Agregar transacción</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    <label>Monto:</label>
+    <input type="number" name="monto" step="0.01" required>
+
+    <label for="factura">Factura (opcional)</label>
+    <input type="file" id="factura" name="factura" accept="image/*">
+
+    <label>Tipo:</label>
+    <select name="tipo" required>
+        <option value="ingreso">Ingreso</option>
+        <option value="gasto">Gasto</option>
+        <option value="deuda">Deuda</option>
+    </select>
+
+    <label>Categoría:</label>
+    <select name="categoria" required>
+        <option value="fijo">Fijo</option>
+        <option value="variable">Variable</option>
+    </select>
+
+    <label>Subcategoría (si fijo):</label>
+    <select name="subcategoria">
+        <option value="">--</option>
+        <option value="luz">Luz</option>
+        <option value="agua">Agua</option>
+        <option value="gas">Gas</option>
+        <option value="internet">Internet</option>
+        <option value="mercado">Mercado</option>
+        <option value="tv">Televisión</option>
+        <option value="streaming">Streaming</option>
+        <option value="seguros">Seguros</option>
+        <option value="cuota">Cuota</option>
+        <option value="administración">Administración</option>
+        <option value="plan celular">Plan celular</option>
+        <option value="otro">Otro</option>
+    </select>
+
+    <label>Cuenta:</label>
+    <select name="cuenta_id" required>
+        {% for c in cuentas %}
+        <option value="{{ c.id }}">{{ c.nombre }}</option>
+        {% endfor %}
+    </select>
+
+    <button class="btn btn-primary" type="submit">Agregar</button>
+</form>
+
+</div>
+
+<div class="card">
+    <h2>Transacciones – {{ mes }}</h2>
+
+    <!-- BUSCADOR -->
+    <form method="get" action="/transacciones" class="flex-between" style="margin-bottom: 16px;">
+        <input
+            type="text"
+            name="q"
+            placeholder="Buscar transacciones..."
+            value="{{ q }}"
+            style="padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.05); color:white; width:250px;"
+        >
+
+        <input type="hidden" name="mes" value="{{ mes }}">
+
+        <button class="btn btn-primary" style="cursor:pointer;">Buscar</button>
+    </form>
+    <!-- FIN BUSCADOR -->
+
+    <ul class="tx-list">
+        {% for t in transacciones %}
+        <li class="tx-row">
+            <div class="tx-left">
+                <div class="tx-icon">
+                    {% if t.tipo == "ingreso" %}💚{% elif t.tipo == "gasto" %}❤️{% else %}⚠️{% endif %}
+                </div>
+                <div>
+                    <div class="tx-title">${{ '%.2f'|format(t.monto) }}</div>
+                    <div class="tx-meta">{{ t.fecha.strftime('%Y-%m-%d') }} — {{ t.categoria }} / {{ t.subcategoria }}</div>
+                </div>
+            </div>
+            <div class="tx-right">
+                {{ t.tipo }}
+
+                {% if t.url_imagen %}
+                <a
+                    href="{{ t.url_imagen }}"
+                    target="_blank"
+                    class="btn-ghost"
+                    style="margin-left:10px; color:var(--accent2); text-decoration:none;"
+                >
+                    Ver factura
+                </a>
+                {% endif %}
+
+                <form action="/transaccion/eliminar/{{ t.id }}" method="post" style="display:inline;">
+                    <button class="btn-ghost" style="margin-left:10px; color:#ef4444;">
+                        Eliminar
+                    </button>
+                </form>
+            </div>
+
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}
