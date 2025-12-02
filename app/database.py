@@ -2,7 +2,7 @@ from sqlmodel import SQLModel, create_engine, Session
 from typing import Generator
 import os
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./app/finanzas.db")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./finanzas.db")
 
 engine = create_engine(
     DATABASE_URL,
