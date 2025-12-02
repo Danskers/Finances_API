@@ -51,6 +51,13 @@ def cop(value):
         return value
 templates.env.filters["cop"] = cop
 
+
+#Creación base de datos render
+@app.on_event("startup")
+def startup_event():
+    crear_db()
+
+
 # ---------- Auth ----------
 @app.get("/")
 def root():
