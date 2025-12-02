@@ -17,6 +17,9 @@ from .models import Usuario, Cuenta, Transaccion, LimiteMensual
 from .routers import uploads
 from .security import get_password_hash, verify_password, crear_token, get_user_from_request
 
+print("SUPABASE_URL:", os.getenv("SUPABASE_URL"))
+print("SUPABASE_KEY length:", len(os.getenv("SUPABASE_KEY") or "NONE"))
+
 app = FastAPI(title="Finanzas personales - Simplificado")
 app.include_router(uploads.router)
 
