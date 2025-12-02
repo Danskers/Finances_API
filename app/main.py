@@ -11,7 +11,7 @@ import locale
 import uuid
 from supabase import create_client, Client
 import os
-from supabase_client import supabase
+from .supabase_client import supabase
 from .database import crear_db, get_session
 from .models import Usuario, Cuenta, Transaccion, LimiteMensual
 from .routers import uploads
