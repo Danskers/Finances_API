@@ -21,8 +21,8 @@ app = FastAPI(title="Finanzas personales - Simplificado")
 app.include_router(uploads.router)
 
 #supabase
-SUPABASE_URL = "https://fdujitwtuecibozsxytk.supabase.co"
-SUPABASE_KEY = "sb_secret_dIPA5z6gkzPG7C7O3Pb_RA_Q80ojOOX"
+#SUPABASE_URL = "https://fdujitwtuecibozsxytk.supabase.co"
+#SUPABASE_KEY = "sb_secret_dIPA5z6gkzPG7C7O3Pb_RA_Q80ojOOX"
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
