@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File, HTTPException, Request  # ← Agregamos Request
+from fastapi import APIRouter, UploadFile, File, HTTPException, Request
 from supabase import Client
 from datetime import datetime
 import uuid
