@@ -57,8 +57,14 @@ templates.env.filters["cop"] = cop
 
 #Creación base de datos render
 @app.on_event("startup")
-def startup_event():
-    crear_db()
+async def startup_event():
+    url: str = os.getenv("SUPABASE_URL")
+    key: str = os.getenv("SUPABASE_KEY")
+
+    if not url or not key:
+        raise ValueError("Faltan variables de entorno SUPABASE_URL o SUPABASE_KEY")
+
+    app.state.supabase: Client = create_client(url, key)
 
 
 # ---------- Auth ----------
