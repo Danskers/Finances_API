@@ -29,7 +29,14 @@ crear_db()
 # Templates, static y locale
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
-locale.setlocale(locale.LC_ALL, "es_CO.UTF-8")
+
+try:
+    locale.setlocale(locale.LC_ALL, "es_CO.UTF-8")  # Ideal para Colombia
+except locale.Error:
+    try:
+        locale.setlocale(locale.LC_ALL, "es_ES.UTF-8")  # Alternativa común
+    except locale.Error:
+        locale.setlocale(locale.LC_ALL, "")  # Usa el locale por defecto del sistema
 
 
 # ---------- Helpers ----------
