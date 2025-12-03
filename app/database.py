@@ -2,12 +2,16 @@ from sqlmodel import SQLModel, create_engine, Session
 from typing import Generator
 import os
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./finanzas.db")
+# Nombre de tu archivo SQLite
+DATABASE_NAME = "finanzas1.sqlite3"
+
+# URL usando ese nombre
+DATABASE_URL = f"sqlite:///{DATABASE_NAME}"
 
 engine = create_engine(
     DATABASE_URL,
     echo=False,
-    connect_args={"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
+    connect_args={"check_same_thread": False}  # Requerido para SQLite en FastAPI
 )
 
 def crear_db():
