@@ -1,5 +1,5 @@
 from http.client import HTTPException
-from fastapi import FastAPI, Request,UploadFile, File, Form, Depends
+from fastapi import FastAPI, Request, UploadFile, File, Form, Depends
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
@@ -11,29 +11,22 @@ import locale
 import uuid
 from supabase import create_client, Client
 import os
-from .supabase_client import supabase
 from .database import crear_db, get_session
 from .models import Usuario, Cuenta, Transaccion, LimiteMensual
 from .routers import uploads
 from .security import get_password_hash, verify_password, crear_token, get_user_from_request
 
+# Prints útiles para debug en logs (puedes borrarlos después)
 print("SUPABASE_URL:", os.getenv("SUPABASE_URL"))
 print("SUPABASE_KEY length:", len(os.getenv("SUPABASE_KEY") or "NONE"))
 
 app = FastAPI(title="Finanzas personales - Simplificado")
 app.include_router(uploads.router)
 
-#supabase
-SUPABASE_URL = "https://fdujitwtuecibozsxytk.supabase.co"
-SUPABASE_KEY = "sb_secret_dIPA5z6gkzPG7C7O3Pb_RA_Q80ojOOX"
-
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-
-
-# crear DB
+# Crear DB al inicio
 crear_db()
 
-# templates, static y locale
+# Templates, static y locale
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 locale.setlocale(locale.LC_ALL, "es_CO.UTF-8")
@@ -46,16 +39,16 @@ def month_for_date(dt: datetime) -> str:
 def current_month_str() -> str:
     return datetime.utcnow().strftime("%Y-%m")
 
-#define el manejo del dinero en COP
 def cop(value):
     try:
-        return locale.currency(value, grouping="true")
+        return locale.currency(value, grouping=True)
     except:
         return value
+
 templates.env.filters["cop"] = cop
 
 
-#Creación base de datos render
+# ---------- Inicialización de Supabase ----------
 @app.on_event("startup")
 async def startup_event():
     url: str = os.getenv("SUPABASE_URL")
@@ -65,12 +58,14 @@ async def startup_event():
         raise ValueError("Faltan variables de entorno SUPABASE_URL o SUPABASE_KEY")
 
     app.state.supabase: Client = create_client(url, key)
+    print("Cliente de Supabase inicializado correctamente")
 
 
-# ---------- Auth ----------
+# ---------- Rutas básicas ----------
 @app.get("/")
 def root():
     return RedirectResponse(url="/login")
+
 @app.get("/register")
 def register_get(request: Request):
     return templates.TemplateResponse("register.html", {"request": request, "title": "Crear cuenta", "error": None})
@@ -197,7 +192,6 @@ def cuentas_editar(
 
     return RedirectResponse(url="/cuentas", status_code=302)
 
-
 @app.post("/cuentas/eliminar/{cuenta_id}")
 def eliminar_cuenta(cuenta_id: int, request: Request, session=Depends(get_session)):
     user = get_user_from_request(request, session)
@@ -223,7 +217,6 @@ def eliminar_cuenta(cuenta_id: int, request: Request, session=Depends(get_sessio
     session.commit()
 
     return RedirectResponse(url="/cuentas", status_code=302)
-
 
 
 # ---------- Transacciones ----------
@@ -276,6 +269,7 @@ def transacciones_list(
 
 @app.post("/transacciones")
 def agregar_transaccion(
+    request: Request,  # Necesario para acceder a app.state.supabase
     monto: float = Form(...),
     tipo: str = Form(...),
     categoria: str = Form(...),
@@ -289,24 +283,23 @@ def agregar_transaccion(
         return RedirectResponse("/login", status_code=303)
 
     mes = datetime.utcnow().strftime("%Y-%m")
-
     url_imagen = None
+    supabase_client: Client = request.app.state.supabase
 
-    if factura:
+    if factura and factura.filename:
         extension = factura.filename.split(".")[-1]
         file_name = f"{user.id}_{uuid.uuid4()}.{extension}"
 
-        supabase.storage.from_("facturas").upload(
+        # Leer el contenido del archivo
+        contents = factura.file.read()
+
+        supabase_client.storage.from_("facturas").upload(
             file_name,
-            factura.file,
+            contents,
             file_options={"content-type": factura.content_type}
         )
 
-        url_imagen = (
-            supabase.storage
-            .from_("facturas")
-            .get_public_url(file_name)
-        )
+        url_imagen = supabase_client.storage.from_("facturas").get_public_url(file_name)
 
     nueva = Transaccion(
         monto=monto,
@@ -326,7 +319,6 @@ def agregar_transaccion(
     return RedirectResponse("/transacciones", status_code=303)
 
 
-
 @app.post("/transaccion/eliminar/{tx_id}")
 def eliminar_transaccion(
     tx_id: int,
@@ -337,7 +329,6 @@ def eliminar_transaccion(
     if not user:
         return RedirectResponse(url="/login")
 
-    # Buscar la transacción
     tx = session.exec(
         select(Transaccion)
         .where(Transaccion.id == tx_id)
@@ -351,8 +342,6 @@ def eliminar_transaccion(
     session.commit()
 
     return RedirectResponse(url="/transacciones", status_code=302)
-
-
 
 
 # ---------- Límite mensual ----------
@@ -372,7 +361,7 @@ def set_limite(request: Request, mes: str = Form(...), monto_limite: float = For
     return RedirectResponse(url="/dashboard", status_code=302)
 
 
-# ---------- Historial (mes a mes) ----------
+# ---------- Historial ----------
 @app.get("/historial")
 def historial(request: Request, session=Depends(get_session), mes: Optional[str] = None):
     user = get_user_from_request(request, session)
