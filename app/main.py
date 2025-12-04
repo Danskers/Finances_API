@@ -259,6 +259,8 @@ def transacciones_list(
             or q_lower in t.fecha.strftime("%Y-%m-%d")
         ]
 
+    transacciones_with_factura = [t for t in trans if t.url_imagen]
+
     cuentas = session.exec(select(Cuenta).where(Cuenta.usuario_id == user.id)).all()
 
     return templates.TemplateResponse(
@@ -269,10 +271,10 @@ def transacciones_list(
             "cuentas": cuentas,
             "user": user,
             "mes": mes_q,
-            "q": q or ""
+            "q": q or "",
+            "transacciones_with_factura": transacciones_with_factura,  # ← NUEVO
         }
     )
-
 
 @app.post("/transacciones")
 def agregar_transaccion(
