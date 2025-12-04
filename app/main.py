@@ -259,7 +259,7 @@ def transacciones_list(
             or q_lower in t.fecha.strftime("%Y-%m-%d")
         ]
 
-    transacciones_with_factura = [t for t in trans if t.url_imagen]
+    transacciones_with_factura = [t for t in trans if t.factura_url]
 
     cuentas = session.exec(select(Cuenta).where(Cuenta.usuario_id == user.id)).all()
 
@@ -272,7 +272,7 @@ def transacciones_list(
             "user": user,
             "mes": mes_q,
             "q": q or "",
-            "transacciones_with_factura": transacciones_with_factura,  # ← NUEVO
+            "transacciones_with_factura": transacciones_with_factura,
         }
     )
 
@@ -318,7 +318,7 @@ def agregar_transaccion(
         cuenta_id=cuenta_id,
         usuario_id=user.id,
         mes=mes,
-        url_imagen=url_imagen
+        factura_url=url_imagen
     )
 
     session.add(nueva)

@@ -63,22 +63,23 @@
             Consultar facturas adjuntas ({{ transacciones_with_factura|length }})
         </button>
 
-        <div id="lista-facturas" style="display: none; margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 12px;">
-            <h3 style="margin-top: 0;">📎 Facturas adjuntas</h3>
-            <ul style="list-style: none; padding: 0;">
-                {% for t in transacciones_with_factura %}
-                <li style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px;">
-                    <strong>{{ t.fecha.strftime('%Y-%m-%d') }} — ${{ '%.2f'|format(t.monto) }} ({{ t.tipo }})</strong><br>
-                    <a href="{{ t.url_imagen }}" target="_blank" style="color: var(--accent2); text-decoration: underline;">
-                        🡥 Abrir factura adjunta
-                    </a>
-                </li>
-                {% endfor %}
-            </ul>
-            <button onclick="document.getElementById('lista-facturas').style.display = 'none'; document.querySelector('.btn.btn-primary').style.display = 'block';"
-                    class="btn-ghost" style="margin-top: 10px;">
-                Ocultar facturas
-            </button>
+    <div id="lista-facturas" style="display: none; margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 12px;">
+        <h3 style="margin-top: 0;">📎 Facturas adjuntas</h3>
+        <ul style="list-style: none; padding: 0;">
+            {% for t in transacciones_with_factura %}
+            <li style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                <strong>{{ t.fecha.strftime('%Y-%m-%d') }} — ${{ '%.2f'|format(t.monto) }} ({{ t.tipo }})</strong><br>
+                <a href="{{ t.factura_url }}" target="_blank" style="color: var(--accent2); text-decoration: underline;">
+                    🡥 Abrir factura adjunta
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+        <button onclick="document.getElementById('lista-facturas').style.display = 'none'; document.querySelector('button[onclick*=\"lista-facturas\"]').style.display = 'block';"
+                class="btn-ghost" style="margin-top: 10px;">
+            Ocultar facturas
+        </button>
+    </div>
         </div>
     </div>
     {% endif %}
