@@ -10,6 +10,14 @@ from .services.cuenta_service import CuentaService
 
 app = FastAPI(title="Account Service - Finanzas personales")
 
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # ajusta al dominio real de tu frontend cuando esto vaya a producción
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.on_event("startup")
 def on_startup() -> None:
