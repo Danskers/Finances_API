@@ -14,6 +14,8 @@
 
 La app permite al usuario registrarse, iniciar sesión y gestionar sus finanzas de forma simple y visual.
 
+
+
 ## Funcionalidades principales
 
 - Registro e inicio de sesión de usuarios
