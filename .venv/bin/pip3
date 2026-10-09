@@ -1,4 +1,4 @@
-#!/home/danskers/Trabajos/proyecto_finanzas/API_finances/.venv/bin/python
+#!/workspaces/Finances_API/.venv/bin/python3.12
 # -*- coding: utf-8 -*-
 import re
 import sys
