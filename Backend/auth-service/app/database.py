@@ -11,10 +11,7 @@ engine = create_engine(DATABASE_URL, echo=False, connect_args=connect_args)
 
 
 def crear_db() -> None:
-    """
-    Crea únicamente la tabla "usuario" (la que pertenece a este servicio).
-    No toca cuenta/transaccion/limite_mensual, que crean otros servicios.
-    """
+    
     SQLModel.metadata.create_all(engine)
 
 
