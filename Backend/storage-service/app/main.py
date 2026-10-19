@@ -16,9 +16,7 @@ def health():
     return {"status": "ok", "service": "storage-service"}
 
 
-# Endpoints síncronos (def, no async def) a propósito: la librería de
-# Supabase hace llamadas bloqueantes y FastAPI las corre en un hilo aparte,
-# así no congelan al servidor mientras suben el archivo.
+
 @app.post("/uploads", response_model=UploadRead, status_code=status.HTTP_201_CREATED)
 def subir_archivo(
     archivo: UploadFile = File(...),
