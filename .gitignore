@@ -1,1 +1,3 @@
 k8s/auth-secret.yaml
+.venv-local/
+.uv-boot/
