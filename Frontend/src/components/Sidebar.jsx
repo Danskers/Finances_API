@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import logo from '../assets/kaibacorp-logo.png'
 import { useAuth } from '../context/AuthContext.jsx'
+import { useTema } from '../theme.js'
 
 const enlaces = [
   { to: '/', texto: 'Resumen' },
@@ -10,6 +11,7 @@ const enlaces = [
 
 export default function Sidebar() {
   const { cerrarSesion } = useAuth()
+  const { esOscuro, alternar } = useTema()
   return (
     <aside className="sidebar">
       <img src={logo} alt="KaibaCorp" className="sidebar-logo" />
@@ -20,6 +22,9 @@ export default function Sidebar() {
           </NavLink>
         ))}
       </nav>
+      <button type="button" className="link-salir link-tema" onClick={alternar}>
+        {esOscuro ? 'Modo claro' : 'Modo oscuro'}
+      </button>
       <button type="button" className="link-salir" onClick={cerrarSesion}>Cerrar sesión</button>
     </aside>
   )
