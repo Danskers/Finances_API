@@ -1,3 +1,7 @@
 k8s/auth-secret.yaml
 .venv-local/
 .uv-boot/
+# Variables de entorno y secretos
+.env
+.env.*
+!.env.example
