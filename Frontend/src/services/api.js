@@ -20,7 +20,14 @@ export async function api(ruta, { method = 'GET', body, formData } = {}) {
   const data = await res.json().catch(() => null)
   if (!res.ok) {
     const detalle = data?.detail
-    throw new Error(typeof detalle === 'string' ? detalle : 'No se pudo completar la acción.')
+
+    const mensaje = Array.isArray(detalle)
+      ? detalle.map(error => error.msg).join(', ')
+      : typeof detalle === 'string'
+        ? detalle
+        : 'No se pudo completar la acción.'
+
+    throw new Error(mensaje)
   }
   return data
 }
