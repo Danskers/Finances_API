@@ -10,9 +10,11 @@ export default function Register() {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [mostrarPassword, setMostrarPassword] = useState(false)
   const [error, setError] = useState('')
 
-  // Validaciones de contraseña en tiempo real
+  // Requisitos de seguridad de la contraseña
   const requisitos = [
     {
       texto: 'Al menos 6 caracteres',
@@ -38,12 +40,27 @@ export default function Register() {
     requisito => requisito.cumplido
   )
 
+  // Verificar que ambas contraseñas coincidan
+  const passwordsCoinciden =
+    password.length > 0 &&
+    confirmPassword.length > 0 &&
+    password === confirmPassword
+
+  // El registro solo se permite si todo está correcto
+  const formularioValido =
+    passwordValida && passwordsCoinciden && email.trim() !== ''
+
   async function enviar(e) {
     e.preventDefault()
     setError('')
 
     if (!passwordValida) {
       setError('La contraseña no cumple todos los requisitos.')
+      return
+    }
+
+    if (!passwordsCoinciden) {
+      setError('Las contraseñas no coinciden.')
       return
     }
 
@@ -78,18 +95,33 @@ export default function Register() {
 
         <label>
           Contraseña
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value)
-              setError('')
-            }}
-            required
-          />
+          <div className="campo-password">
+            <input
+              type={mostrarPassword ? 'text' : 'password'}
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value)
+                setError('')
+              }}
+              required
+            />
+
+            <button
+              type="button"
+              className="boton-ver-password"
+              onClick={() => setMostrarPassword(!mostrarPassword)}
+              aria-label={
+                mostrarPassword
+                  ? 'Ocultar contraseñas'
+                  : 'Mostrar contraseñas'
+              }
+            >
+              {mostrarPassword ? 'Ocultar' : 'Mostrar'}
+            </button>
+          </div>
         </label>
 
-        <div className="requisitos-password" aria-live="polite">
+        <div className="requisitos-password">
           <p className="sub">La contraseña debe contener:</p>
 
           <ul>
@@ -108,6 +140,32 @@ export default function Register() {
           </ul>
         </div>
 
+        <label>
+          Confirmar contraseña
+          <input
+            type={mostrarPassword ? 'text' : 'password'}
+            value={confirmPassword}
+            onChange={(e) => {
+              setConfirmPassword(e.target.value)
+              setError('')
+            }}
+            required
+          />
+        </label>
+
+        {confirmPassword.length > 0 && (
+          <p
+            className="sub"
+            style={{
+              color: passwordsCoinciden ? 'green' : 'red',
+            }}
+          >
+            {passwordsCoinciden
+              ? '✓ Las contraseñas coinciden'
+              : '✗ Las contraseñas no coinciden'}
+          </p>
+        )}
+
         {error && (
           <p className="error" role="alert">
             {error}
@@ -117,7 +175,7 @@ export default function Register() {
         <button
           type="submit"
           className="boton"
-          disabled={!passwordValida}
+          disabled={!formularioValido}
         >
           Crear cuenta
         </button>
