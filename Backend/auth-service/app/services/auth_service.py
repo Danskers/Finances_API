@@ -43,6 +43,18 @@ class AuthService:
 
         return crear_token({"sub": str(usuario.id)})
 
+    def obtener_perfil(self, usuario_id: int) -> Usuario:
+        usuario = self.repo.get_by_id(usuario_id)
+
+        if not usuario:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Usuario no encontrado",
+        )
+
+        return usuario
+
+
     def _crear_cuenta_principal(self, usuario_id: int) -> None:
         """
         Llamada HTTP real a account-service para crear la cuenta por
