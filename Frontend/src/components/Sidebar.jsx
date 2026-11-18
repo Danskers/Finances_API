@@ -7,6 +7,7 @@ const enlaces = [
   { to: '/', texto: 'Resumen' },
   { to: '/cuentas', texto: 'Cuentas' },
   { to: '/transacciones', texto: 'Transacciones' },
+  { to: '/perfil', texto: 'Mi perfil' },
 ]
 
 export default function Sidebar() {

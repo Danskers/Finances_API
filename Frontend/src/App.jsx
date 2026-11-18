@@ -7,6 +7,7 @@ import Register from './pages/Register.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import Accounts from './pages/Accounts.jsx'
 import Transactions from './pages/Transactions.jsx'
+import Settings from './pages/Settings.jsx'
 
 // Rutas privadas: sin token se redirige al login.
 function Privado() {
@@ -29,6 +30,7 @@ export default function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/cuentas" element={<Accounts />} />
         <Route path="/transacciones" element={<Transactions />} />
+        <Route path="/perfil" element={<Settings />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
