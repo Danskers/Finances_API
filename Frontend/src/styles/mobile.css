@@ -1,0 +1,17 @@
+/* Ajustes para celular. Todo vive dentro de @media. */
+
+/* Tarjeta de cuenta: .tarjeta.cuenta pesa mas que .tarjeta en pantallas chicas */
+@media (max-width: 820px) {
+  .tarjeta.cuenta { padding: 0; overflow: hidden; }
+  .cuenta-cabecera { padding: 20px; }
+  .cuenta-cabecera .monto { font-size: 28px; }
+  .cuenta-acciones { padding: 6px 12px; gap: 8px; }
+  .cuenta-acciones .link {
+    flex: 1;
+    min-height: 44px;
+    padding: 10px 8px;
+    border-radius: 10px;
+    font-size: 15px;
+  }
+  .cuenta-acciones .link:active { background: var(--campo); }
+}

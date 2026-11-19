@@ -10,6 +10,7 @@ import Dashboard from './pages/Dashboard.jsx'
 import Accounts from './pages/Accounts.jsx'
 import Transactions from './pages/Transactions.jsx'
 import Settings from './pages/Settings.jsx'
+import './styles/mobile.css'
 
 // Footer general de la aplicación.
 function Footer() {
