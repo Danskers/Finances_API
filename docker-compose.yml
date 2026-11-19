@@ -37,15 +37,64 @@ services:
       - account-service
     restart: unless-stopped
 
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+
   storage-service:
     build: ./Backend/storage-service
     container_name: storage-service
     environment:
+      UPLOADS_DB_PATH: /app/data/uploads.db
       SECRET_KEY: ${SECRET_KEY}
       SUPABASE_URL: ${SUPABASE_URL:-}
       SUPABASE_KEY: ${SUPABASE_KEY:-}
       SUPABASE_BUCKET: ${SUPABASE_BUCKET:-facturas}
       MAX_UPLOAD_MB: 5
+      CELERY_BROKER_URL: amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672//
+    volumes:
+    - invoice_temp:/app/temp_uploads
+    - storage_data:/app/data
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped
+
+
+
+  celery-worker:
+    build: ./Backend/storage-service
+    container_name: celery-worker
+    command: celery -A app.celery_app:celery_app worker --loglevel=info
+    environment:
+      UPLOADS_DB_PATH: /app/data/uploads.db
+      CELERY_BROKER_URL: amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672//
+      SUPABASE_URL: ${SUPABASE_URL:-}
+      SUPABASE_KEY: ${SUPABASE_KEY:-}
+      SUPABASE_BUCKET: ${SUPABASE_BUCKET:-facturas}
+      MAX_UPLOAD_MB: 5
+    volumes:
+    - invoice_temp:/app/temp_uploads
+    - storage_data:/app/data
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
     restart: unless-stopped
 
   api-gateway:
@@ -68,3 +117,8 @@ services:
     depends_on:
       - api-gateway
     restart: unless-stopped
+
+volumes:
+  rabbitmq_data:
+  invoice_temp:
+  storage_data:

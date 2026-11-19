@@ -1,3 +1,4 @@
+
 import { NavLink } from 'react-router-dom'
 import logo from '../assets/kaibacorp-logo.png'
 import { useAuth } from '../context/AuthContext.jsx'
@@ -13,20 +14,49 @@ const enlaces = [
 export default function Sidebar() {
   const { cerrarSesion } = useAuth()
   const { esOscuro, alternar } = useTema()
+
   return (
     <aside className="sidebar">
-      <img src={logo} alt="KaibaCorp" className="sidebar-logo" />
-      <nav>
+
+      <div className="sidebar-marca">
+        <img
+          src={logo}
+          alt="KaibaCorp"
+          className="sidebar-logo"
+        />
+      </div>
+
+      <nav className="sidebar-nav" aria-label="Navegación principal">
         {enlaces.map((e) => (
-          <NavLink key={e.to} to={e.to} end={e.to === '/'} className={({ isActive }) => (isActive ? 'activo' : '')}>
+          <NavLink
+            key={e.to}
+            to={e.to}
+            end={e.to === '/'}
+            className={({ isActive }) => isActive ? 'activo' : ''}
+          >
             {e.texto}
           </NavLink>
         ))}
       </nav>
-      <button type="button" className="link-salir link-tema" onClick={alternar}>
-        {esOscuro ? 'Modo claro' : 'Modo oscuro'}
-      </button>
-      <button type="button" className="link-salir" onClick={cerrarSesion}>Cerrar sesión</button>
+
+      <div className="sidebar-acciones">
+        <button
+          type="button"
+          className="link-salir link-tema"
+          onClick={alternar}
+        >
+          {esOscuro ? '☀️ Modo claro' : '🌙 Modo oscuro'}
+        </button>
+
+        <button
+          type="button"
+          className="link-salir"
+          onClick={cerrarSesion}
+        >
+          ↪ Cerrar sesión
+        </button>
+      </div>
+
     </aside>
   )
 }

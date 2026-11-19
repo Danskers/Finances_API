@@ -38,3 +38,30 @@
 }
 .boton-peligro:disabled { opacity: .5; cursor: not-allowed; }
 .fila-botones { display: flex; align-items: center; gap: 20px; margin-top: 16px; }
+
+
+/* Efecto de iluminación al pasar el cursor */
+.boton {
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.boton:hover {
+  filter: brightness(1.25);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.25),
+              0 0 18px rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Efecto al presionar */
+.boton:active {
+  transform: translateY(0) scale(0.97);
+}
+
+/* Cuando el botón está deshabilitado */
+.boton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
