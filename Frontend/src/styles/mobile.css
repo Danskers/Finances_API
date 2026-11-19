@@ -26,3 +26,32 @@
   .rejilla-3 { gap: 14px; }
   .titulo { margin-bottom: 18px; }
 }
+
+/* Encabezado compacto en una sola fila */
+@media (max-width: 820px) {
+  .sidebar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 14px;
+    border-bottom: 0;
+  }
+  .sidebar .sidebar-marca { width: auto; justify-content: flex-start; flex-shrink: 0; }
+  .sidebar .sidebar-logo { width: 128px; max-width: none; }
+  .sidebar .sidebar-acciones {
+    display: flex;
+    flex-direction: row;
+    width: auto;
+    gap: 4px;
+    margin: 0;
+  }
+  .sidebar .sidebar-acciones > button {
+    padding: 8px 10px;
+    font-size: 13px;
+    white-space: nowrap;
+    width: auto;
+    text-align: center;
+  }
+  .sidebar .sidebar-acciones > :not(button) { display: none; }
+}
