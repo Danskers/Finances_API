@@ -1,31 +1,20 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx'
 import { useTema, cambiarTema } from '../theme.js'
-import { actualizarPerfil, eliminarPerfil } from '../services/perfilService.js'
+import { obtenerPerfil, actualizarPerfil, eliminarPerfil } from '../services/perfilService.js'
 import './Settings.css'
 
-// Intenta leer el correo desde el token (si el token es un JWT).
-function correoDelToken(token) {
-  try {
-    const parte = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')
-    const datos = JSON.parse(atob(parte))
-    const valor = String(datos.email || datos.sub || '')
-    return valor.includes('@') ? valor : ''
-  } catch {
-    return ''
-  }
-}
-
 export default function Settings() {
-  const { token, cerrarSesion } = useAuth()
+  const { cerrarSesion } = useAuth()
   const { tema } = useTema()
   const navigate = useNavigate()
 
-  const correoOriginal = correoDelToken(token)
-  const [email, setEmail] = useState(correoOriginal)
+  const [correoOriginal, setCorreoOriginal] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [passwordActual, setPasswordActual] = useState('')
   const [mostrar, setMostrar] = useState(false)
   const [aviso, setAviso] = useState(null)
   const [guardando, setGuardando] = useState(false)
@@ -34,6 +23,22 @@ export default function Settings() {
   const [textoConfirmar, setTextoConfirmar] = useState('')
   const [eliminando, setEliminando] = useState(false)
   const [errorEliminar, setErrorEliminar] = useState('')
+
+  // Carga el correo actual desde GET /auth/me
+  useEffect(() => {
+    let activo = true
+    obtenerPerfil()
+      .then((perfil) => {
+        if (activo && perfil?.email) {
+          setCorreoOriginal(perfil.email)
+          setEmail(perfil.email)
+        }
+      })
+      .catch(() => {
+        // si falla la carga, el formulario queda vacío y se puede escribir igual
+      })
+    return () => { activo = false }
+  }, [])
 
   const requisitos = [
     { texto: 'Al menos 6 caracteres', cumplido: password.length >= 6 },
@@ -70,12 +75,23 @@ export default function Settings() {
       return
     }
 
+    if (!passwordActual) {
+      setAviso({ tipo: 'error', texto: 'Escribe tu contraseña actual para guardar los cambios.' })
+      return
+    }
+    datos.password_actual = passwordActual
+
     setGuardando(true)
     try {
-      await actualizarPerfil(datos)
+      const actualizado = await actualizarPerfil(datos)
+      if (actualizado?.email) {
+        setCorreoOriginal(actualizado.email)
+        setEmail(actualizado.email)
+      }
       setAviso({ tipo: 'ok', texto: 'Perfil actualizado correctamente.' })
       setPassword('')
       setConfirmPassword('')
+      setPasswordActual('')
     } catch (err) {
       setAviso({ tipo: 'error', texto: err.message })
     } finally {
@@ -123,7 +139,7 @@ export default function Settings() {
 
       <form className="tarjeta seccion-ajustes" onSubmit={guardar}>
         <h2>Datos de la cuenta</h2>
-        <p className="sub">Actualiza tu correo o cambia tu contraseña. Deja la contraseña vacía si no quieres cambiarla.</p>
+        <p className="sub">Actualiza tu correo o cambia tu contraseña. Para guardar los cambios debes confirmar con tu contraseña actual.</p>
 
         <label>
           Correo
@@ -182,6 +198,16 @@ export default function Settings() {
           </>
         )}
 
+        <label>
+          Contraseña actual (para confirmar que eres tú)
+          <input
+            type={mostrar ? 'text' : 'password'}
+            value={passwordActual}
+            onChange={(e) => { setPasswordActual(e.target.value); setAviso(null) }}
+            autoComplete="current-password"
+          />
+        </label>
+
         {aviso && (
           <p className={`aviso ${aviso.tipo}`} role="alert">{aviso.texto}</p>
         )}
@@ -191,10 +217,18 @@ export default function Settings() {
         </button>
       </form>
 
+      <section className="tarjeta seccion-ajustes">
+        <h2>Sesión</h2>
+        <p className="sub">Cierra tu sesión en este dispositivo.</p>
+        <button type="button" className="boton-secundario" onClick={cerrarSesion}>
+          Cerrar sesión
+        </button>
+      </section>
+
       <section className="tarjeta seccion-ajustes zona-peligro">
         <h2>Eliminar perfil</h2>
         <p className="sub">
-          Esta acción borra tu cuenta y no se puede deshacer.
+          Esta acción borra tu cuenta, tus cuentas financieras y tus transacciones. No se puede deshacer.
         </p>
 
         {!verEliminar ? (

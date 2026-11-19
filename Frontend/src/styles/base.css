@@ -1,0 +1,24 @@
+/* Estilos globales: reset, tipografía, formularios, botones y tarjetas */
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--fondo); color: var(--texto); font-family: 'Nunito', 'Segoe UI', sans-serif; }
+h1, h2, h3, p { margin: 0; }
+a { color: var(--enlace); font-weight: 700; }
+button, input, select { font: inherit; }
+:focus-visible { outline: 3px solid var(--dorado); outline-offset: 2px; }
+
+.titulo { color: var(--texto); font-size: 34px; font-weight: 800; margin-bottom: 24px; }
+.claro { color: var(--gris); margin: 16px 0; }
+.sub { color: var(--gris); font-size: 14px; margin: 4px 0 16px; }
+.centro { text-align: center; margin: 16px 0 0; }
+
+.tarjeta { background: var(--superficie); border: 1px solid var(--borde); border-radius: 20px; padding: 24px; box-shadow: 0 1px 3px rgba(20, 27, 77, .08); }
+.tarjeta h2 { font-size: 18px; font-weight: 800; margin-bottom: 12px; }
+
+label { display: block; font-size: 14px; font-weight: 700; margin-top: 14px; }
+input, select { display: block; width: 100%; margin-top: 6px; padding: 12px 14px; border: 2px solid var(--borde); border-radius: 12px; background: var(--campo); color: var(--texto); }
+
+.boton { margin-top: 20px; background: var(--dorado); color: var(--tinta); border: 0; border-radius: 12px; padding: 13px 26px; font-weight: 800; cursor: pointer; }
+.boton:disabled { opacity: .6; cursor: not-allowed; }
+.link { background: none; border: 0; padding: 0; color: var(--enlace); font-weight: 700; cursor: pointer; }
+.link.peligro { color: var(--gasto); }
+.error { background: var(--error-fondo); color: var(--gasto); padding: 12px 14px; border-radius: 12px; margin: 12px 0; font-weight: 700; }

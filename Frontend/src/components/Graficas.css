@@ -1,0 +1,26 @@
+.graficas { margin-top: 32px; }
+.graficas-cabecera { margin-bottom: 16px; }
+.graficas-cabecera h2 { font-size: 24px; font-weight: 800; }
+.graficas-rejilla { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+
+.grafica-fila { margin-bottom: 18px; }
+.grafica-fila-texto { display: flex; justify-content: space-between; gap: 12px; font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+.grafica-pista { height: 18px; background: var(--barra); border-radius: 99px; overflow: hidden; }
+.grafica-relleno { height: 100%; border-radius: 99px; transition: width .4s ease; }
+.grafica-relleno.ingreso { background: var(--ingreso); }
+.grafica-relleno.gasto { background: var(--gasto); }
+.grafica-relleno.limite { background: var(--dorado); }
+
+.dona-contenedor { display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap; }
+.dona { width: 180px; height: 180px; flex-shrink: 0; }
+.dona-etiqueta { fill: var(--gris); font-size: 11px; font-weight: 700; }
+.dona-total { fill: var(--texto); font-size: 15px; font-weight: 800; }
+
+.leyenda { list-style: none; padding: 0; margin: 0; flex: 1; min-width: 180px; }
+.leyenda li { display: flex; align-items: center; gap: 8px; margin: 8px 0; font-size: 14px; }
+.leyenda-color { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+.leyenda-nombre { flex: 1; text-transform: capitalize; }
+.leyenda-valor { font-weight: 800; }
+.leyenda-porcentaje { color: var(--gris); width: 40px; text-align: right; }
+
+.grafica-vacia { color: var(--gris); text-align: center; padding: 24px 0; }

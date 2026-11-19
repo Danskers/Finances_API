@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom'
 import logo from '../assets/kaibacorp-logo.png'
 import { useAuth } from '../context/AuthContext.jsx'
 import { useTema } from '../theme.js'
+import './Sidebar.css'
 
 const enlaces = [
   { to: '/', texto: 'Resumen' },
@@ -57,6 +58,7 @@ export default function Sidebar() {
         </button>
       </div>
 
+      <p className="sidebar-moneda">Moneda: peso colombiano (COP)</p>
     </aside>
   )
 }

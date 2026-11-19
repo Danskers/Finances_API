@@ -1,0 +1,27 @@
+/* Pantallas de inicio de sesión y registro */
+.pagina-auth { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; padding: 24px; }
+.logo-auth { width: min(420px, 90%); height: auto; background: var(--azul); border-radius: 18px; padding: 16px 24px; }
+.form-auth { width: min(400px, 100%); padding: 32px; }
+.form-auth h1 { font-size: 28px; font-weight: 800; }
+
+.campo-password {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.campo-password input {
+  width: 100%;
+  padding-right: 85px;
+}
+
+.boton-ver-password {
+  position: absolute;
+  right: 10px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: inherit;
+  font-size: 13px;
+  font-weight: 600;
+}

@@ -1,0 +1,45 @@
+/* Variables de color: tema claro (por defecto) y tema oscuro */
+:root {
+  color-scheme: light;
+  --azul: #323881;
+  --azul-oscuro: #272c66;
+  --dorado: #e4c766;
+  --tinta: #141b4d;
+  --cian: #7dd3fc;
+  --coral: #fda4af;
+
+  --fondo: #f4f5fb;
+  --superficie: #ffffff;
+  --texto: #141b4d;
+  --gris: #6b7280;
+  --borde: #d9ddf2;
+  --campo: #f6f7fd;
+  --barra: #e3e6f8;
+  --linea: #eef0fa;
+  --enlace: #323881;
+  --sidebar: #323881;
+  --ingreso: #15803d;
+  --gasto: #be185d;
+  --error-fondo: #fde8ee;
+  --ingreso-fondo: #dcfce7;
+  --gasto-fondo: #fce7f3;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --fondo: #0e1126;
+  --superficie: #1a1f3f;
+  --texto: #e8eaf8;
+  --gris: #9aa1c9;
+  --borde: #343c70;
+  --campo: #12162f;
+  --barra: #2a3163;
+  --linea: #272d58;
+  --enlace: #a9b6ff;
+  --sidebar: #141838;
+  --ingreso: #4ade80;
+  --gasto: #f472b6;
+  --error-fondo: #3b1530;
+  --ingreso-fondo: #123524;
+  --gasto-fondo: #3b1530;
+}

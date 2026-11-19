@@ -1,0 +1,8 @@
+/* Resumen: tarjetas de totales y barra del límite de gasto */
+.etq { color: var(--gris); font-weight: 700; font-size: 14px; }
+.monto { font-size: 30px; font-weight: 800; margin-top: 6px; }
+.pos { color: var(--ingreso); }
+.neg { color: var(--gasto); }
+
+.barra { height: 14px; background: var(--barra); border-radius: 99px; overflow: hidden; margin-bottom: 16px; }
+.barra-relleno { height: 100%; background: var(--dorado); }

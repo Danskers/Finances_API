@@ -1,0 +1,6 @@
+/* Ajustes para pantallas pequeñas (la barra lateral tiene los suyos en Sidebar.css) */
+@media (max-width: 820px) {
+  .app-shell { flex-direction: column; }
+  .contenido { padding: 24px 16px; }
+  .dos-col { grid-template-columns: 1fr; }
+}

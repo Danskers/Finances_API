@@ -1,0 +1,8 @@
+/* Tarjetas de cuentas */
+.cuenta { padding: 0; overflow: hidden; }
+.cuenta-cabecera { padding: 22px; color: var(--tinta); }
+.cuenta-cabecera h3 { font-size: 15px; font-weight: 700; }
+.color-0 .cuenta-cabecera { background: var(--dorado); }
+.color-1 .cuenta-cabecera { background: var(--cian); }
+.color-2 .cuenta-cabecera { background: var(--coral); }
+.cuenta-acciones { display: flex; justify-content: space-between; padding: 16px 22px; }

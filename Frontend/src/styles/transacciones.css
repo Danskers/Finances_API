@@ -1,0 +1,10 @@
+/* Tabla de transacciones */
+.tabla-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 15px; }
+th { text-align: left; color: var(--gris); padding: 8px; }
+td { padding: 12px 8px; border-top: 1px solid var(--linea); }
+.derecha { text-align: right; }
+.monto-fila { font-weight: 800; }
+.etiqueta { padding: 4px 12px; border-radius: 99px; font-size: 13px; font-weight: 700; text-transform: capitalize; background: var(--barra); }
+.etiqueta.ingreso { background: var(--ingreso-fondo); color: var(--ingreso); }
+.etiqueta.gasto { background: var(--gasto-fondo); color: var(--gasto); }

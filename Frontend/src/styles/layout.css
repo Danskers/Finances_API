@@ -1,0 +1,9 @@
+/* Estructura general de las pantallas */
+.app-shell { display: flex; min-height: 100vh; }
+.contenido { flex: 1; padding: 40px; min-width: 0; }
+.bloque { margin: 20px 0; }
+.rejilla-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+.dos-col { display: grid; grid-template-columns: 320px 1fr; gap: 24px; align-items: start; }
+.fila { display: flex; gap: 12px; flex-wrap: wrap; }
+.fila input { flex: 1; min-width: 200px; }
+.fila .boton { margin-top: 0; }

@@ -65,3 +65,14 @@
   transform: none;
   box-shadow: none;
 }
+.boton-secundario {
+  margin-top: 8px;
+  background: transparent;
+  color: var(--texto);
+  border: 2px solid var(--borde);
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.boton-secundario:hover { border-color: var(--dorado); }

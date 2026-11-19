@@ -3,6 +3,7 @@ import './theme.js'
 import { Link, Navigate, Outlet, Route, Routes } from 'react-router-dom'
 import { useAuth } from './context/AuthContext.jsx'
 import Sidebar from './components/Sidebar.jsx'
+import Graficas from './components/Graficas.jsx'
 import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
 import Dashboard from './pages/Dashboard.jsx'
@@ -67,7 +68,7 @@ export default function App() {
       <Route path="/registro" element={<Register />} />
 
       <Route element={<Privado />}>
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/" element={<><Dashboard /><Graficas /></>} />
         <Route path="/cuentas" element={<Accounts />} />
         <Route path="/transacciones" element={<Transactions />} />
         <Route path="/perfil" element={<Settings />} />
