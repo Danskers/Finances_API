@@ -15,3 +15,14 @@
   }
   .cuenta-acciones .link:active { background: var(--campo); }
 }
+
+/* Formularios apilados */
+@media (max-width: 820px) {
+  .fila { flex-direction: column; gap: 10px; }
+  .fila input,
+  .fila select { flex: none; min-width: 0; width: 100%; }
+  .fila .boton { width: 100%; min-height: 48px; }
+  input, select { font-size: 16px; }
+  .rejilla-3 { gap: 14px; }
+  .titulo { margin-bottom: 18px; }
+}
