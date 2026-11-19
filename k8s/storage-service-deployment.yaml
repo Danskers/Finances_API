@@ -15,11 +15,28 @@ spec:
         app: storage
     spec:
       containers:
-      - name: storage
-        image: storage-service:latest
-        imagePullPolicy: IfNotPresent
-        ports:
-        - containerPort: 8002
+        - name: storage
+          image: storage-service:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8002
+
+          env:
+            - name: SUPABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: supabase-secret
+                  key: SUPABASE_URL
+
+            - name: SUPABASE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: supabase-secret
+                  key: SUPABASE_KEY
+
+            - name: SUPABASE_BUCKET
+              value: "facturas"
+
 ---
 apiVersion: v1
 kind: Service
@@ -29,7 +46,7 @@ spec:
   selector:
     app: storage
   ports:
-  - protocol: TCP
-    port: 8002
-    targetPort: 8002
+    - protocol: TCP
+      port: 8002
+      targetPort: 8002
   type: ClusterIP
