@@ -62,12 +62,16 @@ async def startup_event():
     key: str = os.getenv("SUPABASE_KEY")
 
     if not url or not key:
-        raise ValueError("Faltan variables de entorno SUPABASE_URL o SUPABASE_KEY")
+        print("⚠️  SUPABASE_URL/SUPABASE_KEY no configuradas. Subida de facturas deshabilitada.")
+        app.state.supabase = None
+        return
 
-    app.state.supabase: Client = create_client(url, key)
-    print("Cliente de Supabase inicializado correctamente")
-
-
+    try:
+        app.state.supabase: Client = create_client(url, key)
+        print("Cliente de Supabase inicializado correctamente")
+    except Exception as e:
+        print(f"⚠️  No se pudo conectar a Supabase ({e}). Subida de facturas deshabilitada.")
+        app.state.supabase = None
 # ---------- Rutas básicas ----------
 @app.get("/")
 def root():
@@ -390,3 +394,12 @@ def historial(request: Request, session=Depends(get_session), mes: Optional[str]
         "total_gastos": total_gastos,
         "monto_limite": limite.monto_limite if limite else 0.0
     })
+
+
+
+@app.get("/api/token")
+def api_token(request: Request):
+    token = request.cookies.get("access_token")
+    if not token:
+        raise HTTPException(status_code=401, detail="No autenticado")
+    return {"token": token}

@@ -1,0 +1,70 @@
+
+services:
+  auth-service:
+    build: ./Backend/auth-service
+    container_name: auth-service
+    environment:
+      DATABASE_URL: sqlite:////data/finanzas1.sqlite3
+      SECRET_KEY: ${SECRET_KEY}
+      ACCESS_TOKEN_EXPIRE_MINUTES: 60
+      ACCOUNT_SERVICE_URL: http://account-service:8001
+    volumes:
+      - ./finanzas1.sqlite3:/data/finanzas1.sqlite3
+    depends_on:
+      - account-service
+    restart: unless-stopped
+
+  account-service:
+    build: ./Backend/account-service
+    container_name: account-service
+    environment:
+      DATABASE_URL: sqlite:////data/finanzas1.sqlite3
+      SECRET_KEY: ${SECRET_KEY}
+    volumes:
+      - ./finanzas1.sqlite3:/data/finanzas1.sqlite3
+    restart: unless-stopped
+
+  transaction-service:
+    build: ./Backend/transaction-service
+    container_name: transaction-service
+    environment:
+      DATABASE_URL: sqlite:////data/finanzas1.sqlite3
+      SECRET_KEY: ${SECRET_KEY}
+      ACCOUNT_SERVICE_URL: http://account-service:8001
+    volumes:
+      - ./finanzas1.sqlite3:/data/finanzas1.sqlite3
+    depends_on:
+      - account-service
+    restart: unless-stopped
+
+  storage-service:
+    build: ./Backend/storage-service
+    container_name: storage-service
+    environment:
+      SECRET_KEY: ${SECRET_KEY}
+      SUPABASE_URL: ${SUPABASE_URL:-}
+      SUPABASE_KEY: ${SUPABASE_KEY:-}
+      SUPABASE_BUCKET: ${SUPABASE_BUCKET:-facturas}
+      MAX_UPLOAD_MB: 5
+    restart: unless-stopped
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - auth-service
+      - account-service
+      - transaction-service
+      - storage-service
+    restart: unless-stopped
+
+  frontend:
+    build: ./Frontend
+    container_name: frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - api-gateway
+    restart: unless-stopped

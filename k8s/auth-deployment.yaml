@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-deployment
+  labels:
+    app: auth-service
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: auth-service
+  template:
+    metadata:
+      labels:
+        app: auth-service
+    spec:
+      containers:
+        - name: auth-service
+          image: auth-service:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+              name: http
+          env:
+            - name: DATABASE_URL
+              value: "sqlite:////data/finanzas1.sqlite3"
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: auth-secret
+                  key: SECRET_KEY
+            - name: ACCESS_TOKEN_EXPIRE_MINUTES
+              value: "60"
+            - name: ACCOUNT_SERVICE_URL
+              value: "http://account-service:8000"
+          volumeMounts:
+            - name: auth-data
+              mountPath: /data
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+      volumes:
+        - name: auth-data
+          persistentVolumeClaim:
+            claimName: auth-storage
