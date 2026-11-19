@@ -91,3 +91,9 @@
   .sidebar .sidebar-nav a[href="/transacciones"]::before { content: "🔁"; }
   .sidebar .sidebar-nav a[href="/perfil"]::before { content: "👤"; }
 }
+
+/* Pie de pagina oculto en celular */
+@media (max-width: 820px) {
+  .footer { display: none; }
+  .contenido { padding: 20px 14px; }
+}
