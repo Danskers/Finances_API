@@ -1,8 +1,6 @@
-
 import { NavLink } from 'react-router-dom'
 import logo from '../assets/kaibacorp-logo.png'
 import { useAuth } from '../context/AuthContext.jsx'
-import { useTema } from '../theme.js'
 import './Sidebar.css'
 
 const enlaces = [
@@ -14,49 +12,27 @@ const enlaces = [
 
 export default function Sidebar() {
   const { cerrarSesion } = useAuth()
-  const { esOscuro, alternar } = useTema()
 
   return (
     <aside className="sidebar">
+      <img src={logo} alt="KaibaCorp" className="sidebar-logo" />
 
-      <div className="sidebar-marca">
-        <img
-          src={logo}
-          alt="KaibaCorp"
-          className="sidebar-logo"
-        />
-      </div>
-
-      <nav className="sidebar-nav" aria-label="Navegación principal">
+      <nav>
         {enlaces.map((e) => (
-          <NavLink
-            key={e.to}
-            to={e.to}
-            end={e.to === '/'}
-            className={({ isActive }) => isActive ? 'activo' : ''}
-          >
+          <NavLink key={e.to} to={e.to} end={e.to === '/'} className={({ isActive }) => (isActive ? 'activo' : '')}>
             {e.texto}
           </NavLink>
         ))}
       </nav>
 
-      <div className="sidebar-acciones">
-        <button
-          type="button"
-          className="link-salir link-tema"
-          onClick={alternar}
-        >
-          {esOscuro ? '☀️ Modo claro' : '🌙 Modo oscuro'}
-        </button>
-
-        <button
-          type="button"
-          className="link-salir"
-          onClick={cerrarSesion}
-        >
-          ↪ Cerrar sesión
-        </button>
-      </div>
+      <button type="button" className="sidebar-salir" onClick={cerrarSesion}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+          <polyline points="16 17 21 12 16 7" />
+          <line x1="21" y1="12" x2="9" y2="12" />
+        </svg>
+        Cerrar sesión
+      </button>
 
       <p className="sidebar-moneda">Moneda: peso colombiano (COP)</p>
     </aside>
