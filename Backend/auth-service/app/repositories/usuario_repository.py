@@ -21,3 +21,13 @@ class UsuarioRepository:
         self.session.commit()
         self.session.refresh(usuario)
         return usuario
+
+    def update(self, usuario: Usuario) -> Usuario:
+        self.session.add(usuario)
+        self.session.commit()
+        self.session.refresh(usuario)
+        return usuario
+
+    def delete(self, usuario: Usuario) -> None:
+        self.session.delete(usuario)
+        self.session.commit()

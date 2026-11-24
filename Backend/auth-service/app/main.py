@@ -2,7 +2,13 @@ from fastapi import Depends, FastAPI, status
 from sqlmodel import Session
 
 from .database import crear_db, get_session
-from .schemas.usuario import TokenResponse, UsuarioCreate, UsuarioLogin, UsuarioRead
+from .schemas.usuario import (
+    TokenResponse,
+    UsuarioCreate,
+    UsuarioLogin,
+    UsuarioRead,
+    UsuarioUpdate,
+)
 from .services.auth_service import AuthService
 from .security.jwt import get_current_usuario_id
 
@@ -42,3 +48,20 @@ def obtener_perfil(
     service: AuthService = Depends(get_auth_service),
 ):
     return service.obtener_perfil(usuario_id)
+
+
+@app.put("/me", response_model=UsuarioRead)
+def actualizar_perfil(
+    data: UsuarioUpdate,
+    usuario_id: int = Depends(get_current_usuario_id),
+    service: AuthService = Depends(get_auth_service),
+):
+    return service.actualizar_perfil(usuario_id, data)
+
+
+@app.delete("/me", status_code=status.HTTP_204_NO_CONTENT)
+def eliminar_perfil(
+    usuario_id: int = Depends(get_current_usuario_id),
+    service: AuthService = Depends(get_auth_service),
+):
+    service.eliminar_perfil(usuario_id)
